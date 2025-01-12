@@ -1,9 +1,0 @@
-{application,chatbot_manago,
-             [{config_mtime,1734253299},
-              {optional_applications,[]},
-              {applications,[kernel,stdlib,elixir,logger,httpoison,jason]},
-              {description,"chatbot_manago"},
-              {modules,['Elixir.ChatbotManago']},
-              {registered,[]},
-              {vsn,"0.1.0"},
-              {mod,{'Elixir.ChatbotManago',[]}}]}.
