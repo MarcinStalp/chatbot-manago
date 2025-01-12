@@ -73,7 +73,7 @@ Aplikacja korzysta z API o poniższych punktach końcowych:
 Instalacja
 1. Sklonuj repozytorium:
 
-git clone https://github.com/twoje-repozytorium/chatbot-manago.git
+git clone https://github.com/MarcinStalp/chatbot-manago.git
 
 2. Zainstaluj zależności
 
