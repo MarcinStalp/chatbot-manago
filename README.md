@@ -16,11 +16,11 @@ iex -S mix
 
 **Przykład użycia w trybie interaktywnym:**
 ```elixir
-list  # Wyświetla listę dostępnych modeli
-model "llama3.2:latest" # Wybiera wskazany model
-show "llama3.2:latest" # Wyswietla szczegółowe informacje o wybranym modelu
-ask "Jaka jest stolica Francji?"  # Wysyła zapytanie
-history  # Wyświetla historię zapytań
+list  # Wyświetla listę dostępnych modeli;
+model "llama3.2:latest" # Wybiera wskazany model;
+show "llama3.2:latest" # Wyswietla szczegółowe informacje o wybranym modelu;
+ask "Jaka jest stolica Francji?"  # Wysyła zapytanie;
+history  # Wyświetla historię zapytań;
 pull "llama3.2:latest" # Pobiera wskazany model z serwera
 ```
 
