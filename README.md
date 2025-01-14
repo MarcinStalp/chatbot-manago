@@ -1,92 +1,142 @@
-# chatbot-manago
+# ChatbotManago
 
-ChatbotManago to aplikacja napisana w Elixirze, służąca do zarządzania modelami sztucznej inteligencji oraz interakcji z nimi poprzez API. Aplikacja może działać zarówno w trybie interaktywnym, jak i skryptowym, co czyni ją elastycznym narzędziem do integracji z innymi systemami lub samodzielnego użytkowania.
+ChatbotManago to aplikacja Elixir umożliwiająca interakcję z modelami AI poprzez API. Aplikacja obsługuje dwa tryby działania: **interaktywny** i **skryptowy**.
 
-Funkcje
-- Interaktywna obsługa zapytań do modeli AI.
-- Tryb skryptowy do automatycznego przetwarzania zapytań z linii komend.
-- Zarządzanie modelami AI, w tym:
-  - Listowanie dostępnych modeli.
-  - Pobieranie szczegółowych informacji o modelach.
-  - Pobieranie modeli z serwera.
-  - Wysyłanie zapytań do wybranego modelu.
-- Zapisywanie historii zapytań i odpowiedzi w pamięci aplikacji.
-- Strumieniowa obsługa odpowiedzi API, co pozwala na płynne odbieranie wyników.
+---
 
-Architektura
-Aplikacja korzysta z wbudowanego modułu Application, dzięki czemu działa jako nadzorowany proces Elixira. Działa w dwóch trybach:
+## Tryby działania
 
-1. Tryb interaktywny: umożliwia komunikację z użytkownikiem w czasie rzeczywistym.
-2. Tryb skryptowy: pozwala na wywoływanie funkcji aplikacji za pomocą argumentów z linii komend.
+### Tryb interaktywny
+Tryb interaktywny jest używany do długotrwałego działania aplikacji, np. w sesji `iex`. Umożliwia dynamiczne wywoływanie funkcji i interakcję z aplikacją w czasie rzeczywistym.
 
-Moduły i funkcjonalności
-1. Start aplikacji
-  - Inicjalizacja Agenta (:query_history) do przechowywania historii zapytań.
-  - Obsługa dwóch trybów pracy: interaktywnego i skryptowego.
-2. Parsowanie argumentów
-  - OptionParser analizuje argumenty wejściowe i przekazuje je do odpowiednich funkcji.
-3. Zarządzanie modelami
- - list/0: Pobiera listę dostępnych modeli z API.
- - show/1: Wyświetla szczegóły wybranego modelu.
- - pull/1: Pobiera model z serwera.
-4. Interakcja z modelami
-- ask/1: Wysyła zapytanie do bieżącego modelu.
-- Strumieniowe odbieranie odpowiedzi (handle_ask_stream/3).
-5. Historia zapytań
-- Przechowuje zapytania i odpowiedzi w pamięci aplikacji.
-- history/0: Wyświetla całą historię zapytań.
-6. Obsługa błędów
-- Wszystkie operacje API są opakowane w obsługę błędów i timeoutów.
-
-Wymagania
-- Elixir
-- Zewnętrzne biblioteki:
-  - HTTPoison: do wysyłania zapytań HTTP.
-  - Jason: do obsługi JSON.
-
-Przykłady użycia
-1. Uruchomienie w trybie interaktywnym:
-
+**Uruchomienie:**
+```bash
 iex -S mix
+```
 
-Użycie funkcji w sesji interaktywnej:
+**Przykład użycia w trybie interaktywnym:**
+```elixir
+list  # Wyświetla listę dostępnych modeli
+model "llama3.2:latest" * Wybiera wskazany model
+show "llama3.2:latest" # Wyswietla szczegółowe informacje o wybranym modelu
+ask "Jaka jest stolica Francji?"  # Wysyła zapytanie
+history  # Wyświetla historię zapytań
+pull "llama3.2:latest" * Pobiera wskazany model z serwera
+```
 
-ChatbotManago.list()
-ChatbotManago.ask("Czym jest AI?")
+---
 
-2. Tryb skryptowy:
-   
-elixir chatbot_manago.exs --list
-elixir chatbot_manago.exs --model gpt-3 --prompt "Czym jest AI?"
+### Tryb skryptowy
+Tryb skryptowy umożliwia jednorazowe wykonanie poleceń. Jest idealny do automatyzacji zadań w skryptach lub terminalu.
 
-3. Historia zapytań
+**Uruchomienie:**
+```bash
+elixir ./chatbot_manago [opcje]
+```
 
-ChatbotManago.history()
+**Przykład użycia w trybie skryptowym:**
+```bash
+./chatbot_manago --model=llama3.2 --prompt="2+2"
+```
 
-Struktura API
-Aplikacja korzysta z API o poniższych punktach końcowych:
-  - GET /api/tags: Pobiera listę modeli.
-  - POST /api/generate: Wysyła zapytanie do modelu i generuje odpowiedź.
-  - POST /api/show: Pobiera szczegóły dotyczące wybranego modelu.
-  - POST /api/pull: Pobiera model z serwera.
+---
 
-Instalacja
-1. Sklonuj repozytorium:
+## Opcje dostępne w trybie skryptowym
 
-git clone https://github.com/MarcinStalp/chatbot-manago.git
+| Opcja          | Opis                                                       | Przykład                                              |
+|-----------------|-----------------------------------------------------------|------------------------------------------------------|
+| `--list`       | Wyświetla listę dostępnych modeli.                         | `./chatbot_manago --list`                           |
+| `--model`      | Wybiera model do wysłania zapytania.                       | `./chatbot_manago --model=llama3.2`                 |
+| `--prompt`     | Wysyła zapytanie do modelu.                                | `./chatbot_manago --model=llama3.2 --prompt="2+2"`  |
+| `--show`       | Wyświetla szczegółowe informacje o wskazanym modelu.       | `./chatbot_manago --show=llama3.2`                  |
+| `--pull`       | Pobiera model z serwera.                                   | `./chatbot_manago --pull=llama3.2`                  |
+| `--history`    | Wyświetla historię zapytań.                                | `./chatbot_manago --history`                        |
 
-2. Zainstaluj zależności
+---
 
-mix deps.get
+## Przykłady pełnego użycia
 
-3. Uruchom aplikację:
+### Wyświetlenie listy dostępnych modeli
+```bash
+./chatbot_manago --list
+```
+**Przykładowy wynik:**
+```
+Dostępne modele:
+1. llama3.2
+2. bert-base
+3. gpt-neo
+```
 
-iex -S mix
+---
 
-Dalsze plany
-- Dodanie możliwości konfiguracji poprzez pliki YAML lub JSON.
-- Integracja z dodatkowymi systemami API.
-- Rozbudowa historii o możliwość zapisu do pliku.
+### Zadanie pytania do modelu
+```bash
+./chatbot_manago --model=llama3.2 --prompt="Jaka jest stolica Polski?"
+```
+**Przykładowy wynik:**
+```
+Warszawa
+Zapytanie zakończone.
+```
 
-Licencja
-Projekt jest dostępny na licencji MIT.
+---
+
+### Wyświetlenie szczegółowych informacji o modelu
+```bash
+./chatbot_manago --show=llama3.2
+```
+**Przykładowy wynik:**
+```json
+{
+  "name": "llama3.2",
+  "description": "Model językowy trenujący na dużych zestawach danych",
+  "version": "3.2",
+  "parameters": {
+    "max_tokens": 1000,
+    "temperature": 0.7
+  }
+}
+```
+
+---
+
+### Pobranie modelu z serwera
+```bash
+./chatbot_manago --pull=llama3.2:latest
+```
+**Przykładowy wynik:**
+```
+ChatbotManago uruchomiony w trybie interaktywnym.
+Status pobierania: pulling manifest
+Status pobierania: pulling dde5aa3fc5ff
+Status pobierania: pulling 966de95ca8a6
+Status pobierania: pulling fcc5a6bec9da
+Status pobierania: pulling a70ff7e570d9
+Status pobierania: pulling 56bb8bd477a5
+Status pobierania: pulling 34bb5ab01051
+Status pobierania: verifying sha256 digest
+Status pobierania: writing manifest
+Status pobierania: success
+Pobieranie zakończone.
+```
+
+---
+
+### Wyświetlenie historii zapytań
+```bash
+./chatbot_manago --history
+```
+**Przykładowy wynik:**
+```
+{
+  "prompt": "Jaka jest stolica Polski?",
+  "response": "Warszawa"
+}
+{
+  "prompt": "2+2",
+  "response": "4"
+}
+```
+
+---
